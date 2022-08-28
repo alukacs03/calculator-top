@@ -45,7 +45,14 @@ html, body {
 }
 
 .screen {
-    text-align: right;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.previousNumber, .currentNumber {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
     min-height: 20px;
+    padding: 10px;
 }

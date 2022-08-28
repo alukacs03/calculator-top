@@ -1,20 +1,19 @@
 function add(a,b) {
     return a + b;
 }
-
 function subtract(a,b) {
     return a - b;
 }
-
 function multiply(a,b) {
     return a * b;
 }
-
 function divide(a,b) {
     return a / b;
 }
 
 function operate(operator, a, b) {
+    a = Number(a);
+    b = Number(b);
     if (operator == "+") {
         return add(a,b);
     } else if (operator == "-") {
@@ -28,12 +27,18 @@ function operate(operator, a, b) {
     }
 }
 
-let pressedOperator = null
-let numberOne = null
-let numberTwo = null
-
 const display = document.querySelector(".screen")
-console.log(display)
+const previousNumberDiv = document.querySelector(".previousNumber")
+const currentNumberDiv = document.querySelector(".currentNumber")
+let calculated = false;
+let pressedOperator = null;
+let shouldclear = false;
+
+
+const equalsButton = document.querySelector(".equals")
+equalsButton.addEventListener("click", calculate)
+
+const delButton = document.querySelector(".delbtn")
 
 const numButtons = document.querySelectorAll(".number")
 numButtons.forEach(button => {
@@ -46,33 +51,55 @@ operatorButtons.forEach(button => {
 })
 
 function operatorPressed(e) {
-    pressedOperator = e.target.textContent
-    numberOne = display.textContent
-    display.textContent = null
+    if (pressedOperator != null) { 
+        calculate()
+    }
+    if (currentNumberDiv.textContent == "" || currentNumberDiv.textContent == null) {
+        pressedOperator = e.target.textContent;
+        console.log(pressedOperator);
+        return;
+    }
+
+    pressedOperator = e.target.textContent;
+    numberOne = currentNumberDiv.textContent
+    shouldclear = true;
+    previousNumberDiv.textContent = currentNumberDiv.textContent + ' ' + `${pressedOperator}`;
+    currentNumberDiv.textContent = calculation;
 }
 
-const equalsButton = document.querySelector(".equals")
-equalsButton.addEventListener("click", calculate)
-
-function calculate(e) {
-    numberTwo = display.textContent
+function calculate() {
+    if (pressedOperator == null) {
+        return;
+    }
+    numberTwo = currentNumberDiv.textContent
+    if (pressedOperator == "/" && numberTwo == 0) {
+        currentNumberDiv.textContent = "Good try. Now reset!";
+        return;
+    }
     let calculation = operate(pressedOperator, numberOne, numberTwo)
-    display.textContent = calculation
+    currentNumberDiv.textContent = calculation
+    previousNumberDiv.textContent = `${numberOne} ${pressedOperator} ${numberTwo}` + ' =';
+    pressedOperator = null;
+    shouldclear = false;
 }
 
-const delButton = document.querySelector(".delbtn")
 delButton.addEventListener("click", function() {
-    display.textContent = display.textContent.substring(0, display.textContent.length -1)
+    currentNumberDiv.textContent = currentNumberDiv.textContent.substring(0, currentNumberDiv.textContent.length -1)
 })
 
 const clearButton = document.querySelector(".clearbtn")
 clearButton.addEventListener("click", function() {
-    display.textContent = null
+    previousNumberDiv.textContent = null
+    currentNumberDiv.textContent = null
     pressedOperator = null
     numberOne = null
     numberTwo = null
 })
 
 function updateDisplay (button) {
-    display.textContent += button.target.textContent
+    if (shouldclear == true) {
+        currentNumberDiv.textContent = null;
+        shouldclear = false;
+    }
+    currentNumberDiv.textContent += button.target.textContent
 }
