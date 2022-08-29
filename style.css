@@ -1,9 +1,8 @@
-* {
-    border: 1px solid red;
-}
+
 
 html, body {
     height: 99%;
+    background-color: teal;
 }
 
 #mainframe {
@@ -18,9 +17,68 @@ html, body {
 }
 
 #calculatorbody {
-    padding: 20px;
-    height: 40vh;
-    width: 40vh;
+    height: 370px;
+    width: 300px;
+    background-color: darkgrey;
+    padding: 15px;
+    
+}
+
+.windowfunctions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    background-color: darkblue;
+}
+
+.windowtitle {
+    color: white;
+    padding-left: 10px;
+    font-weight: 900;
+    font-family: sans-serif;
+}
+
+.windowbuttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.funcbutton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+    height: 15px;
+    width: 15px;
+    margin-right: 2px;
+    background-color: darkgray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+.grid-item {
+    background-color: darkgray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+    height: 50px;
+    font-family: sans-serif;
+    font-weight: 900;
+    color: blue;
+}
+
+.windowbg {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    background-color: darkgray;
+    border-top: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
 }
 
 .buttonsgrid-container {
@@ -47,12 +105,20 @@ html, body {
 .screen {
     display: flex;
     flex-direction: column;
+    background-color: whitesmoke;
+    font-family: sans-serif;
+    font-weight:900;
+    color: blue;
+}
+
+.previousNumber {
+    color: black;
 }
 
 .previousNumber, .currentNumber {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
-    min-height: 20px;
+    min-height: 25px;
     padding: 10px;
 }
