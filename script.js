@@ -1,105 +1,162 @@
-function add(a,b) {
-    return a + b;
-}
-function subtract(a,b) {
-    return a - b;
-}
-function multiply(a,b) {
-    return a * b;
-}
-function divide(a,b) {
-    return a / b;
-}
+// initialise displays
+const prevNumDisplay = document.querySelector('#previousNumberDisplay');
+const currNumDisplay = document.querySelector('#currentNumberDisplay');
 
-function operate(operator, a, b) {
-    a = Number(a);
-    b = Number(b);
-    if (operator == "+") {
-        return add(a,b);
-    } else if (operator == "-") {
-        return subtract(a,b);
-    } else if (operator == "x") {
-        return multiply(a,b);
-    } else if (operator == "/") {
-        return divide(a,b);
-    } else {
-        console.log("Please use a proper operator as first argument");
-    }
+// this will be the object that will contain our operator, and the two numbers we want to operate with
+let operation = {
+    prevNum: null, 
+    operator: null, 
+    currNum: null
 }
-
-const display = document.querySelector(".screen")
-const previousNumberDiv = document.querySelector(".previousNumber")
-const currentNumberDiv = document.querySelector(".currentNumber")
 let calculated = false;
-let pressedOperator = null;
-let shouldclear = false;
 
+// initialise buttons
+// delBtn's work is very simple, so I used an arrow function
+const delBtn = document.querySelector('#delBtn');
+delBtn.addEventListener('click', () =>
+    currNumDisplay.textContent = currNumDisplay.textContent.substring(0, currNumDisplay.textContent.length - 1)
+);
 
-const equalsButton = document.querySelector(".equals")
-equalsButton.addEventListener("click", calculate)
+const clearBtn = document.querySelector('#clearBtn');
+clearBtn.addEventListener('click', clearScreen);
+const equalsBtn = document.querySelector('#equalsBtn');
+equalsBtn.addEventListener('click', handleEquals);
+const decimalBtn = document.querySelector('#decimalBtn');
+decimalBtn.addEventListener('click', handleDecimal);
 
-const delButton = document.querySelector(".delbtn")
+const numberBtns = document.querySelectorAll('.number');
+numberBtns.forEach(e => {
+    e.addEventListener('click', handleNumber)
+});
 
-const numButtons = document.querySelectorAll(".number")
-numButtons.forEach(button => {
-    button.addEventListener("click", updateDisplay)
-})
+const operatorBtns = document.querySelectorAll('.operator');
+operatorBtns.forEach(e => {
+    e.addEventListener('click', handleOperator)
+});
 
-const operatorButtons = document.querySelectorAll(".operator")
-operatorButtons.forEach(button => {
-    button.addEventListener("click", operatorPressed)
-})
+/* 
+FUNCTIONALITY STARTS FROM HERE
+*/
 
-function operatorPressed(e) {
-    if (pressedOperator != null) { 
-        calculate()
+// handles number input
+function handleNumber(e) {
+    if (e.target.textContent === "0" && currNumDisplay.textContent === "0") {
+        return false
     }
-    if (currentNumberDiv.textContent == "" || currentNumberDiv.textContent == null) {
-        pressedOperator = e.target.textContent;
-        console.log(pressedOperator);
-        return;
+    if (currNumDisplay.textContent === "0" || calculated) {
+        clearScreen()
+    }
+    if (currNumDisplay.textContent.length < 15) {
+        currNumDisplay.textContent += e.target.textContent;
+        operation.currNum = currNumDisplay.textContent;
     }
 
-    pressedOperator = e.target.textContent;
-    numberOne = currentNumberDiv.textContent
-    shouldclear = true;
-    previousNumberDiv.textContent = currentNumberDiv.textContent + ' ' + `${pressedOperator}`;
-    currentNumberDiv.textContent = calculation;
+    console.log(operation)
+};
+
+//logic to handle the presses of +, -, /, and x
+function handleOperator(e) {
+    calculated = false;
+    // if there is no operator, no current number, no previous number, do nothing
+    if (operation.operator === null && operation.currNum === null && operation.prevNum === null){
+        return false;
+    }
+    // if there is a previous number, but no current number, update the operator
+    if (operation.currNum === null && operation.prevNum !== null) {
+        operation.operator = e.target.textContent;
+        updateDisplay();
+    }
+    /* if there is a previous number AND there is a current number, 
+        do the PREVIOUS operation with these and then update the operator */
+    if (operation.prevNum !== null && operation.currNum !== null) {
+        calculate();
+        operation.operator = e.target.textContent;
+        updateDisplay();
+    }
+    /* if there is no previous number, but there is a current number, 
+        make the current number the previous one and update the operator */ 
+    if (operation.prevNum === null && currNumDisplay.textContent != "") {
+        operation.prevNum = currNumDisplay.textContent;
+        currNumDisplay.textContent = "";
+        operation.currNum = null;
+        operation.operator = e.target.textContent;
+        updateDisplay();
+    }
+    console.log(operation)
 }
 
+// updates the display with the current values
+function updateDisplay(){
+    currNumDisplay.textContent = operation.currNum
+    prevNumDisplay.textContent = `${operation.prevNum} ${operation.operator}`
+}
+
+// do the calculation
 function calculate() {
-    if (pressedOperator == null) {
-        return;
+    if (operation.operator === "/") {
+        operation.prevNum = Number(operation.prevNum) / Number(operation.currNum)
+        operation.currNum = null
     }
-    numberTwo = currentNumberDiv.textContent
-    if (pressedOperator == "/" && numberTwo == 0) {
-        currentNumberDiv.textContent = "Good try. Now reset!";
-        return;
+    if (operation.operator === "x") {
+        operation.prevNum = Number(operation.prevNum) * Number(operation.currNum)
+        operation.currNum = null
     }
-    let calculation = operate(pressedOperator, numberOne, numberTwo)
-    currentNumberDiv.textContent = calculation
-    previousNumberDiv.textContent = `${numberOne} ${pressedOperator} ${numberTwo}` + ' =';
-    pressedOperator = null;
-    shouldclear = false;
+    if (operation.operator === "-") {
+        operation.prevNum = Number(operation.prevNum) - Number(operation.currNum)
+        operation.currNum = null
+    }
+    if (operation.operator === "+") {
+        operation.prevNum = Number(operation.prevNum) + Number(operation.currNum)
+        operation.currNum = null
+    }
 }
 
-delButton.addEventListener("click", function() {
-    currentNumberDiv.textContent = currentNumberDiv.textContent.substring(0, currentNumberDiv.textContent.length -1)
-})
-
-const clearButton = document.querySelector(".clearbtn")
-clearButton.addEventListener("click", function() {
-    previousNumberDiv.textContent = null
-    currentNumberDiv.textContent = null
-    pressedOperator = null
-    numberOne = null
-    numberTwo = null
-})
-
-function updateDisplay (button) {
-    if (shouldclear == true) {
-        currentNumberDiv.textContent = null;
-        shouldclear = false;
+// clears the screen and sets the default values to all variables
+function clearScreen(){
+    currNumDisplay.textContent = "";
+    prevNumDisplay.textContent = "";
+    operation = {
+        prevNum: null, 
+        operator: null, 
+        currNum: null
     }
-    currentNumberDiv.textContent += button.target.textContent
+    calculated = false;
+};
+
+// handles the equal button being pressed
+function handleEquals() {
+    if (currNumDisplay.textContent !== "" && !calculated && operation.prevNum !== null) {
+        prevNumDisplay.textContent = `${operation.prevNum} ${operation.operator} ${operation.currNum} = `
+        calculate();
+        currNumDisplay.textContent = operation.prevNum
+        calculated = true;
+        operation.operator = null;
+    }
+};
+
+//adds the decimal if the number doesn't already contain one
+function handleDecimal() {
+    if (currNumDisplay.textContent.includes('.')) {
+        return false;
+    }
+    if (calculated) {
+        calculated = false;
+        prevNumDisplay.textContent = "";
+        operation.prevNum = null;
+    }
+    if (currNumDisplay.textContent == "") {
+        currNumDisplay.textContent = "0";
+    }
+    currNumDisplay.textContent += '.';
+}
+
+// add click animations to buttons and revoke them after a certain amount of time
+const allBtns = document.querySelectorAll('.grid-item');
+allBtns.forEach((btn) => {
+    btn.addEventListener('click', animateButtons);
+})
+
+function animateButtons(e) {
+    e.target.classList.add('clicked')
+    setTimeout(() => {e.target.classList.remove('clicked')}, 50)
 }

@@ -1,8 +1,7 @@
-
-
 html, body {
     height: 99%;
     background-color: teal;
+    overflow: hidden;
 }
 
 #mainframe {
@@ -32,7 +31,7 @@ html, body {
     background-color: darkblue;
 }
 
-.windowtitle {
+#windowtitle {
     color: white;
     padding-left: 10px;
     font-weight: 900;
@@ -58,6 +57,7 @@ html, body {
     border-left: 2px solid lightgray;
     border-right: 2px solid black;
     border-bottom: 2px solid black;
+    user-select: none;
 }
 
 .grid-item {
@@ -88,21 +88,36 @@ html, body {
     gap: 5px;
 }
 
-.clearbtn {
+#clearBtn {
     grid-column: 1 / 3;
 }
 
-.delbtn {
+#delBtn {
     grid-column: 3 / 5;
 }
 
 .grid-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonface;
+    border-right-color: #424242;
+    border-bottom-color: #424242;
+    background-color: silver;
 }
 
-.screen {
+.grid-item {
+    padding: 5px 5px 5px;
+    border-radius: 1px;
+}
+
+.clicked {
+    border: 2px inset #fff;
+    background: lightgrey;
+    color: #424242;
+    box-shadow: -1px -1px #000;
+}
+
+#screens {
     display: flex;
     flex-direction: column;
     background-color: whitesmoke;
@@ -111,14 +126,36 @@ html, body {
     color: blue;
 }
 
-.previousNumber {
+#previousNumberDisplay {
     color: black;
 }
 
-.previousNumber, .currentNumber {
+#previousNumberDisplay, #currentNumberDisplay {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
     min-height: 25px;
     padding: 10px;
+}
+
+#footer {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 2px;
+    border-style: outset;
+    background-color: silver;
+}
+
+#footer p, #footer a {
+    font-size: 15px;
+    text-decoration: none;
+    color: white;
+    font-weight: 900;
+    font-family: sans-serif;
+}
+
+#footer a:hover {
+    color:blue;
 }

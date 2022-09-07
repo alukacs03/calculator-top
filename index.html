@@ -7,27 +7,27 @@
         <script defer src="script.js"></script>
     </head>
     <body id = "mainframe">
-        <div id = "title">Calculator 95</div>
+        <div></div>
         <div id = "calculatordiv">
             <div class = "windowbg">
                 <div class = "windowfunctions">
-                    <div class = "windowtitle">
+                    <div id = "windowtitle">
                         Calculator 95
                     </div>
                     <div class = "windowbuttons">
-                        <p class = "funcbutton">_</p>
-                        <p class = "funcbutton">☐</p>
-                        <p class = "funcbutton">🗙</p>
+                        <p id = "minimise" class = "funcbutton">_</p>
+                        <p id = "maximise" class = "funcbutton">☐</p>
+                        <p id = "quitwindow" class = "funcbutton">🗙</p>
                     </div>
                 </div>
                 <div id  = "calculatorbody">
-                    <div class = "screen">
-                        <div class = "previousNumber"></div>
-                        <div class = "currentNumber"></div>
+                    <div id = "screens">
+                        <div id = "previousNumberDisplay"></div>
+                        <div id = "currentNumberDisplay"></div>
                     </div>
                     <div class = "buttonsgrid-container">
-                        <button class = "grid-item clearbtn">CLEAR</button>
-                        <button class = "grid-item delbtn">DELETE</button>
+                        <button id = "clearBtn" class = "grid-item">CLEAR</button>
+                        <button id = "delBtn" class = "grid-item">DELETE</button>
                         <button class = "grid-item number" data-number="7">7</button>
                         <button class = "grid-item number" data-number="8">8</button>
                         <button class = "grid-item number" data-number="9">9</button>
@@ -40,16 +40,18 @@
                         <button class = "grid-item number" data-number="2">2</button>
                         <button class = "grid-item number" data-number="3">3</button>
                         <button class = "grid-item operator">-</button>
-                        <button class = "grid-item number">.</button>
+                        <button id = "decimalBtn" class = "grid-item">.</button>
                         <button class = "grid-item number" data-number="0">0</button>
-                        <button class = "grid-item equals">=</button>
+                        <button id = "equalsBtn" class = "grid-item">=</button>
                         <button class = "grid-item operator">+</button>
     
                     </div>
                 </div>
             </div>
         </div>
-        <div id = "footer">Made by Ákos Lukács, 2022</div>
+        <div id = "footer">
+            <p>Made by <a href="https://github.com/lukiakos">Ákos Lukács</a>, 2022</p>
+        </div>
     </body>
 
 </html>
