@@ -40,14 +40,20 @@ FUNCTIONALITY STARTS FROM HERE
 
 // handles number input
 function handleNumber(e) {
-    if (e.target.textContent === "0" && currNumDisplay.textContent === "0") {
+    var inputNumber = null;
+    if(typeof e == 'number') {
+        inputNumber = e;
+    } else {
+        inputNumber = e.target.textContent
+    }
+    if (inputNumber == "0" && currNumDisplay.textContent === "0") {
         return false
     }
     if (currNumDisplay.textContent === "0" || calculated) {
         clearScreen()
     }
     if (currNumDisplay.textContent.length < 15) {
-        currNumDisplay.textContent += e.target.textContent;
+        currNumDisplay.textContent += inputNumber;
         operation.currNum = currNumDisplay.textContent;
     }
 
@@ -55,7 +61,13 @@ function handleNumber(e) {
 };
 
 //logic to handle the presses of +, -, /, and x
-function handleOperator(e) {
+function handleOperator(e, keyboard) {
+    var inputOperator = null;
+    if(keyboard) {
+        inputOperator = e;
+    } else {
+        inputOperator = e.target.textContent
+    }
     calculated = false;
     // if there is no operator, no current number, no previous number, do nothing
     if (operation.operator === null && operation.currNum === null && operation.prevNum === null){
@@ -63,14 +75,14 @@ function handleOperator(e) {
     }
     // if there is a previous number, but no current number, update the operator
     if (operation.currNum === null && operation.prevNum !== null) {
-        operation.operator = e.target.textContent;
+        operation.operator = inputOperator;
         updateDisplay();
     }
     /* if there is a previous number AND there is a current number, 
         do the PREVIOUS operation with these and then update the operator */
     if (operation.prevNum !== null && operation.currNum !== null) {
         calculate();
-        operation.operator = e.target.textContent;
+        operation.operator = inputOperator;
         updateDisplay();
     }
     /* if there is no previous number, but there is a current number, 
@@ -79,7 +91,7 @@ function handleOperator(e) {
         operation.prevNum = currNumDisplay.textContent;
         currNumDisplay.textContent = "";
         operation.currNum = null;
-        operation.operator = e.target.textContent;
+        operation.operator = inputOperator;
         updateDisplay();
     }
     console.log(operation)
@@ -93,6 +105,10 @@ function updateDisplay(){
 
 // do the calculation
 function calculate() {
+    if (operation.currNum === "0"){
+        window.alert("Come on now... Resetting...")
+        clearScreen()
+    }
     if (operation.operator === "/") {
         operation.prevNum = Number(operation.prevNum) / Number(operation.currNum)
         operation.currNum = null
@@ -160,3 +176,20 @@ function animateButtons(e) {
     e.target.classList.add('clicked')
     setTimeout(() => {e.target.classList.remove('clicked')}, 50)
 }
+
+//keyboard functionality
+
+document.addEventListener('keydown', (e) => {
+    if (!isNaN(Number(e.key))){
+        handleNumber(Number(e.key))
+    }
+    if (e.key === 'x' || e.key === '/' || e.key === '+' || e.key === '-') {
+        handleOperator(e.key, true)
+    }
+    if (e.key === "=" || e.key === "Enter") {
+        handleEquals()
+    }
+    if (e.key === ".") {
+        handleDecimal()
+    }
+})
